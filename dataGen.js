@@ -1,4 +1,4 @@
-const fs = require('fs');
+// const fs = require('fs');
 
 const whole = ['Entire', null]
 const rooms = ['1 Bedroom', '2 Bedroom', '3 Bedroom', '4 Bedroom', '5 Bedroom']
@@ -322,7 +322,7 @@ let hipster = 'Diy Flannel Normcore Umami Meh Coloring Book Fanny Pack Bushwick 
 
 let dataGen = function (whole, rooms, type, mod, area, string) {
   let data = []
-  for(var i = 1; i < 10000001; i++) {
+  for(var i = 1; i < 1000000; i++) {
     let wholeRand = whole[Math.floor(Math.random() * whole.length)]
     let roomsRand = rooms[Math.floor(Math.random() * rooms.length)]
     let typeRand = type[Math.floor(Math.random() * type.length)]
@@ -349,9 +349,11 @@ let dataGen = function (whole, rooms, type, mod, area, string) {
     let listing = {_id: i, name: name}
     data.push(listing)
   }
-
+  console.log(data)
   return data
 }
 
-const data = JSON.stringify(dataGen(whole, rooms, type, mod, area, hipster));
-fs.writeFile('./sampleData.js', data, err => (err ? console.log('error occured: ', err) : console.log('sampleCommentData saved.')));
+JSON.stringify(dataGen(whole, rooms, type, mod, area, hipster));
+
+
+// fs.writeFile('./sampleData.js', file, err => (err ? console.log('error occured: ', err) : console.log('sampleCommentData saved.')));
