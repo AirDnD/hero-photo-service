@@ -322,30 +322,37 @@ let hipster = 'Diy Flannel Normcore Umami Meh Coloring Book Fanny Pack Bushwick 
 
 let dataGen = function (whole, rooms, type, mod, area, string) {
   let data = []
-  for(var i = 1; i < 10; i++) {
+  for(var i = 1; i < 10000001; i++) {
     let wholeRand = whole[Math.floor(Math.random() * whole.length)]
     let roomsRand = rooms[Math.floor(Math.random() * rooms.length)]
     let typeRand = type[Math.floor(Math.random() * type.length)]
     let modRand = mod[Math.floor(Math.random() * mod.length)]
     let areaRand = area[Math.floor(Math.random() * area.length)]
     let hipsterArr = string.split(' ')
-    let hipsterStr = ''
-    let randHipLen = Math.ceil(Math.random() * 4)
-    for(var i = 0; i <= randHipLen; i++) {
-      let hipsterRand = hipsterArr[Math.floor(Math.random() * hipsterArr.length)]
-      hipsterStr = hipsterStr + hipsterRand
+    let randHipLen = Math.ceil(Math.random() * 3)
+
+    let randHipArr = []
+    for(var j = 0; j < randHipLen; j++) {
+      randHipArr.push(hipsterArr[Math.floor(Math.random() * hipsterArr.length)])
     }
-    let inMod = null
-    if (wholeRand) {
-      let inMod = 'in'
+
+    let hipsterStr = randHipArr.join(' ')
+    let inMod = 'in';
+    let name;
+    let withMod = 'with'
+
+    if (wholeRand === null) {
+      name = `${roomsRand} ${typeRand} ${modRand} ${areaRand} ${withMod} ${hipsterStr}`;
+    } else {
+      name = `${wholeRand} ${roomsRand} ${inMod} ${typeRand} ${modRand} ${areaRand} ${withMod} ${hipsterStr}`;
     }
-    let name = wholeRand + roomsRand + inMod + typeRand + modRand + areaRand + hipsterStr;
 
     let listing = {_id: i, name: name}
+    data.push(listing)
 
-    console.log(wholeRand)
   }
 
+  return data
 }
 
 dataGen(whole, rooms, type, mod, area, hipster)
