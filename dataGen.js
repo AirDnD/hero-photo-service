@@ -1,4 +1,4 @@
-
+const fs = require('fs');
 
 const whole = ['Entire', null]
 const rooms = ['1 Bedroom', '2 Bedroom', '3 Bedroom', '4 Bedroom', '5 Bedroom']
@@ -330,7 +330,6 @@ let dataGen = function (whole, rooms, type, mod, area, string) {
     let areaRand = area[Math.floor(Math.random() * area.length)]
     let hipsterArr = string.split(' ')
     let randHipLen = Math.ceil(Math.random() * 3)
-
     let randHipArr = []
     for(var j = 0; j < randHipLen; j++) {
       randHipArr.push(hipsterArr[Math.floor(Math.random() * hipsterArr.length)])
@@ -349,12 +348,10 @@ let dataGen = function (whole, rooms, type, mod, area, string) {
 
     let listing = {_id: i, name: name}
     data.push(listing)
-
   }
 
   return data
 }
 
-dataGen(whole, rooms, type, mod, area, hipster)
-
-
+const data = JSON.stringify(dataGen(whole, rooms, type, mod, area, hipster));
+fs.writeFile('./sampleData.js', data, err => (err ? console.log('error occured: ', err) : console.log('sampleCommentData saved.')));
