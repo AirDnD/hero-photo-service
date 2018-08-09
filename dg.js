@@ -13,33 +13,26 @@ let dataGen = function () {
 
 	let count = 1;
 
-	if (count >= 10000000) { return}
+	
 
 		for (let j = 0; j < rooms.length; j++) {
 			let room = rooms[j]
-			if (count >= 10000000) { return }
 			for (let k = 0; k < types.length; k++) {
 				let type = types[k]
-				if (count >= 10000000) { return }
 				for (let l = 0; l < areas.length; l++) {
 					let area = areas[l]
-					if (count >= 10000000) { return }
 					for (let m = 0; m < char.length; m++) {
 						let c1 = char[m]
-						if (count >= 10000000) { return }
 						for(let n = 0; n < char.length; n++) {
 						  let c2 = char[n]
-						  if (count >= 10000000) { return }
 							for(let o = 0; o < char.length; o++) {
 								let c3 = char[o]
-								if (count >= 10000000) { return }
 									name = `${room} ${type} ${area} ${c1}${c2}${c3}`
 									let listing = {id: count, name: name}
 									count++
                   console.log(listing)
                   out.write(listing + '\r\n', 'utf-8')
-									if (count >= 10000000) { return }
-								
+									if (count >= 10000001) { return }
 							}
 						}
 					}
