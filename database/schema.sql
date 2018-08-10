@@ -3,59 +3,27 @@ CREATE DATABASE hero;
 
 USE hero; 
 
-CREATE TABLE users (
-  id INT NOT NULL AUTO_INCREMENT, 
-  user_name VARCHAR(30) NOT NULL, 
-  user_membership_date DATE NOT NULL,
-  user_photo_url VARCHAR(250) NOT NULL, 
-  PRIMARY KEY(id)
-);
-
-
-
-CREATE TABLE lists (
-  id INT NOT NULL AUTO_INCREMENT,
-  list_name VARCHAR(50) , 
-  list_user_id INT NOT NULL,
-  PRIMARY KEY(id),
-  FOREIGN KEY(list_user_id) REFERENCES users(id)
-);
-
-
-
 CREATE TABLE listings (
-  id INT NOT NULL AUTO_INCREMENT, 
-  listing_review_average INT,
-  listing_review_total INT,
-  listing_host_name VARCHAR(50),
-  listing_address TEXT, 
-  listing_host_photo_url VARCHAR(255),
-  listing_description TEXT,
-  listing_space_description TEXT, 
-  listing_neighborhood_description TEXT,
-  PRIMARY KEY(id)
-
+  id serial NOT NULL PRIMARY KEY, 
+  name TEXT
 );
 
 
 
-CREATE TABLE listings_lists (
-  listing_id INT NOT NULL, 
-  list_id INT NOT NULL,
-  FOREIGN KEY (listing_id) REFERENCES listings(id),
-  FOREIGN KEY (list_id) REFERENCES lists(id)
+CREATE TABLE account(
+ user_id serial PRIMARY KEY,
+ username VARCHAR (50) UNIQUE NOT NULL,
+ password VARCHAR (50) NOT NULL,
+ email VARCHAR (355) UNIQUE NOT NULL,
+ created_on TIMESTAMP NOT NULL,
+ last_login TIMESTAMP
 );
 
-
-
-CREATE TABLE listing_photos (
-	id INT NOT NULL AUTO_INCREMENT, 
-	photo_description VARCHAR(255),
-	photo_url VARCHAR(200) NOT NULL,
-  photo_listing_id INT NOT NULL,
-	PRIMARY KEY(id),
-  FOREIGN KEY(photo_listing_id) REFERENCES listings(id)
-
+CREATE TABLE photos (
+	id serial PRIMARY KEY NOT NULL, 
+	description VARCHAR(255),
+	url VARCHAR(200) NOT NULL,
+  listing_id INT NOT NULL
 );
 
-
+-- {id: 1, description: xcv, url: xcvdsf.com, listing_id: 1}

@@ -7,13 +7,11 @@ const areas = ["Stonefell","Rustfort","Crowband","Eaststorm","Newshield","Mossha
 
 let char = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9"]
 
-const out = fs.createWriteStream('./data.txt', {flags: 'a'})
+const out = fs.createWriteStream('./data111.txt', {flags: 'a'})
 
 let dataGen = function () {
 
 	let count = 1;
-
-	
 
 		for (let j = 0; j < rooms.length; j++) {
 			let room = rooms[j]
@@ -30,9 +28,9 @@ let dataGen = function () {
 									name = `${room} ${type} ${area} ${c1}${c2}${c3}`
 									let listing = {id: count, name: name}
 									count++
-                  console.log(listing)
+                  // console.log(listing)
                   out.write(listing + '\r\n', 'utf-8')
-									if (count >= 10000001) { return }
+									if (count >= 100) { return }
 							}
 						}
 					}
