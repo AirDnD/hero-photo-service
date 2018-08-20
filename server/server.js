@@ -1,7 +1,9 @@
+require('newrelic');
 const express = require('express');
-
+const redis = require('redis')
 
 const app = require('./app.js');
+
 
 app.listen(3000, (err) => {
   if (err) {

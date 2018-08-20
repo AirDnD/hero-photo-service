@@ -1,12 +1,23 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const Queries = require('../database/Queries.js');
+const db = require('../database/');
+const redis = require('redis')
+
 
 const app = express();
 
 
-// making a middleware to tarck all incoming requests
+const client = redis.createClient();
+
+client.on('connect', () => {
+    console.log(`connected to redis`);
+});
+client.on('error', err => {
+    console.log(`Error: ${err}`);
+});
+
+// making a middleware to track all incoming requests
 app.use((req, res, next) => {
   console.log('Request method: ', req.method);
   next();
@@ -16,105 +27,60 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.get('/listings/:listing_id/photos', (req, res) => {
   const listingId = req.params.listing_id;
   // query the database to get all data from the listing_photos table
-  Queries.getListingPhotos(listingId, (err, results) => {
-    if (err) {
-      console.log('Server side error in query to get data from the listings_data table', err);
+  client.get(listingId, function (err, result) {
+    if (result) {
+      // console.log('you just used cached data, you saved time yo!')
+      res.send(result)
     } else {
-      console.log('Server side success in query to get data from the listings_data table', res);
-      res.json(results);
+      // console.log('you just saved stuff to cache')
+      db.select().from('photos').where('listing_id', listingId).then(function(data){
+        client.set(listingId, JSON.stringify(data))
+        res.send(data)
+      }).catch(function(response){
+        res.send('error bruh', response)
+      })
     }
-  });
+  })
   // res.send(200);
 });
 
-app.get('/users/:user_id/list', (req, res) => {
-  const userId = req.params.user_id;
-  // query the database to get all data from the lists table
-  Queries.getLists(userId, (err, results) => {
-    if (err) {
-      console.log('Server side error in query to get data from the lists table ', err);
-    } else {
-      console.log('Server side success in query to get data from the lists table ', res);
-      res.json(results);
-    }
-  });
+app.get('/listings/photos/:photo_id', (req, res) => {
+  const photoId = req.params.photo_id;
+  // query the database to get all data from the listing_photos table
+  db.select().from('photos').where('id', photoId).then(function (data) {
+    res.send(data);
+  })
+  // res.send(200);
 });
 
-app.post('/users/:user_id/addList', (req, res) => {
-  const userId = req.params.user_id;
-  const listName = req.body.list_name;
-  // querty the database to insert the new list into the lists table
-  Queries.addList(userId, listName, (err, results) => {
-    if (err) {
-      console.log('Server side error in query to add list to the lists table ', err);
-    } else {
-      console.log('Server side success in query to add list to the lists table ', res);
-      res.sendStatus(201);
-    }
-  });
-});
+app.post('/listings/:listing_id/photos', (req, res) => {
+  // console.log(req.body);
+  db.insert(req.body).returning('*').into('photos').then(function(data) {
+    res.send(data);
+  })
 
-app.get('/listings/:listing_id/lists', (req, res) => {
-  const listingId = req.params.listing_id;
-  // query the database
-  Queries.getListsOfListing(listingId, (err, results) => {
-    if (err) {
-      console.log('Server side error in querying listings-lists');
-    } else {
-      console.log('Server side success in querrying listings_lists');
-      res.json(results);
-    }
-  });
-});
+})
 
-app.post('/listings/:listing_id/lists/:list_id', (req, res) => {
-  const listingId = req.params.listing_id;
-  const listId = req.params.list_id;
+app.put('/listings/photos/:photo_id', (req, res) => {
+  const photoId = req.params.photo_id;
 
-  console.log('listingId is ', listingId);
-  console.log('listId is ', listId);
+  db('photos').where({ id: photoId }).update(req.body).returning('*').then(function(data) {
+    res.send(data)
+  })
 
-  Queries.addToFavorite(listingId, listId, (err, results) => {
-    if (err) {
-      console.log('Server side error in query to add to the listings_lists table ', err);
-    } else {
-      console.log('Server side success in query to add to the listings_lists table ', results);
-      res.sendStatus(201);
-    }
-  });
-});
+})
 
-app.delete('/listings/:listing_id/lists/:list_id', (req, res) => {
-  const listingId = req.params.listing_id;
-  const listId = req.params.list_id;
+app.delete('/listings/photos/:photo_id', (req, res) => {
+  const photoId = req.params.photo_id;
 
-  console.log('listingId is ', listingId);
-  console.log('listId is ', listId);
-
-  Queries.removeFromFavorite(listingId, listId, (err, results) => {
-    if (err) {
-      console.log('Server side error in query to delete from the listings_lists table ', err);
-    } else {
-      console.log('Server side success in query to delete from the listings_lists table ', results);
-      res.sendStatus(200);
-    }
-  });
-});
-
-app.get('/listings/:listing_id/details', (req, res) => {
-  const listingId = req.params.listing_id;
-
-  Queries.getListingDetails(listingId, (err, results) => {
-    if (err) {
-      console.log('Server side error in querying listings');
-    } else {
-      console.log('Server side success in querrying listings');
-      res.json(results);
-    }
+  db('photos').where({ id: photoId }).del().then(function() {
+    res.json({success: true});
   });
 });
 

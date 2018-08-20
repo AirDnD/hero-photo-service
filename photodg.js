@@ -7,7 +7,8 @@ let pics = ["pic_002.png","pic_003.png","pic_004.png","pic_005.png","pic_006.png
 
 let picDataGen = function () {
 
-  const listingCount = 10000001;
+  const listingCount = 101;
+  let count = 1;
 
   const min = 3;
   const max = 10;
@@ -28,7 +29,7 @@ let picDataGen = function () {
 
       let photoObj = {id: count, description: desc, url: url, listing_id: i}
       count++
-      fs.appendFileSync('./photoData01.csv', `${photoObj.id},${photoObj.description},${photoObj.url},${photoObj.listing_id}\r\n`, 'utf-8')
+      fs.appendFileSync('./testData.csv', `${photoObj.id},${photoObj.description},${photoObj.url},${photoObj.listing_id}\r\n`, 'utf-8')
     }
    if (i % 100000 === 0) {
     console.log('It just passed ' + i + ' records!!!!')
