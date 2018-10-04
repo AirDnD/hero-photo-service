@@ -1,0 +1,47 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 1800
+      arrivalRate: 113
+  processor: "./generateData.js"
+scenarios:
+  - name: "visit listing page get all photos"
+    flow:
+      - loop:
+        - function: "randomListingId"
+        - get:
+            url: "/listings/{{ id }}/photos"
+        count: 7
+    weight: 90
+
+  - name: "post new photo"
+    flow:
+      - loop:
+        - function: "generateRandomData"
+        - post:
+            url: "/listings/{{ listing_id }}/photos"
+            json: 
+              listing_id: "{{ listing_id }}"
+              description: "{{ description }}"
+              url: "{{ url }}"
+        count: 1
+
+    weight: 8
+
+  - name: "delete a photo"
+    flow:
+      - function: "randomPhotoId"
+      - delete:
+          url: "/listings/photos/{{ id }}"
+    weight: 1
+
+  - name: "update a photo"
+    flow:
+      - function: "generateForUpdate"
+      - put:
+          url: "/listings/photos/{{ photoId }}"
+          json:
+            description: "{{ description }}"
+            url: "{{ url }}"
+    weight: 1
+
