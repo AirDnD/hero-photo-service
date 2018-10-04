@@ -33,6 +33,9 @@ CREATE TABLE test(
   PRIMARY KEY (listing_id, id)
 );
 
+psql -h 18.144.2.186 -p 5432 -U other_user -W photos 
+\copy photos from '/Users/ringosanchez/Desktop/airDnD/photoData01.csv' delimiter ',' csv header;
+
 -- {id: 1, description: xcv, url: xcvdsf.com, listing_id: 1}
 
 copy listings from '/Users/ringosanchez/Desktop/airDnD/sampleData.csv' delimiter ',' csv header;
