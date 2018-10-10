@@ -1,6 +1,6 @@
 # AirDnD - Hero Photo Service Systems Design
 
-> Systems Design project with a goal of hitting at least 1000 requests per second once uploaded onto AWS and load balanced.
+> Systems Design project with a goal of hitting at least 1000 requests per second once uploaded onto AWS and load balanced. The final implementation went up to 4700 RPS.
 
 ## Related Projects
 
