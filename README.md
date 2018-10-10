@@ -1,27 +1,23 @@
 # Project Name
 
-> Project description
+> Systems Design project with a goal of hitting at least 1000 requests per second once uploaded onto AWS and load balanced.
 
 ## Related Projects
 
-  - https://github.com/airDnD/hero-photo-service
   - https://github.com/airDnD/reservation-service
   - https://github.com/airDND/about-Service
   - https://github.com/airDND/CustomerReview
 
 ## Table of Contents
 
-1. [Usage](#Usage)
 1. [Requirements](#requirements)
-1. [Development](#development)
+2. [Installation](#development)
 
 ## Usage
 
-> Some usage instructions
+> 
 
 ## Requirements
-
-An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
 
 - Node 6.13.0
 - etc
